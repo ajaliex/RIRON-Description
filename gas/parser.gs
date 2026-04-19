@@ -52,20 +52,23 @@ function parseTopicFile(filename) {
   
   // HTMLパース
   // GAS環境にはDOMParserがないため、正規表現を用いた簡易パースを行う
-  const h2Match = content.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
-  const fullTitle = h2Match ? h2Match[1].replace(/<[^>]+>/g, '').trim() : filename;
+  const titleMatch = content.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  let fullTitle = filename;
+  if (titleMatch) {
+    fullTitle = titleMatch[1].replace(/<[^>]+>/g, '').replace(/\s*-\s*スタディング\s*$/, '').trim();
+  }
   
   // idとtitleの分離 (例: "1‐3 納税地" -> id: "1-3", title: "納税地")
   let id = filename;
   let title = fullTitle;
   
-  const titleMatch = fullTitle.match(/^([0-9０-９]+[-\u2010-\u2015\uFF0D][0-9０-９]+)[\s　]+(.*)$/);
-  if (titleMatch) {
+  const sectionMatch = fullTitle.match(/^([0-9０-９]+[-\u2010-\u2015\uFF0D][0-9０-９]+)[\s　]+(.*)$/);
+  if (sectionMatch) {
     // 全角数字や各種ハイフンを半角に正規化しておく
-    id = titleMatch[1].replace(/[０-９]/g, function(s) {
+    id = sectionMatch[1].replace(/[０-９]/g, function(s) {
       return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
     }).replace(/[-\u2010-\u2015\uFF0D]/g, '-');
-    title = titleMatch[2];
+    title = sectionMatch[2];
   } else if (fullTitle.includes(' ')) {
     const parts = fullTitle.split(' ');
     id = parts[0];
