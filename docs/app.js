@@ -169,48 +169,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderFeedback(feedbackRaw) {
-        // バックエンドから返ってくるテキスト形式のフィードバックをパースして表示する
-        // 想定形式:
-        // 1. 総合評価: A
-        // 2. 良い点: ...
-        // 3. 不足・改善点: ...
-        // 4. 模範解答の要点: ...
+        // バックエンドから返ってくるテキスト形式のフィードバックをそのまま表示する
+        // 簡単なマークダウン（**太字**）だけパースして見やすくする
+        let html = escapeHtml(feedbackRaw);
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         
-        let grade = "判定不能";
-        let good = "";
-        let bad = "";
-        let model = "";
-
-        // マークダウンの装飾（** など）が混入した際のエラーを防ぐため除去
-        feedbackRaw = feedbackRaw.replace(/\*\*/g, '');
-
-        const lines = feedbackRaw.split('\n');
-        let currentSection = "";
-
-        lines.forEach(line => {
-            if (line.match(/^1\.?\s*総合評価:/i) || line.match(/総合評価:/i)) {
-                grade = line.replace(/^1\.?\s*総合評価:/i, '').replace(/総合評価:/i, '').trim();
-                currentSection = "grade";
-            } else if (line.match(/^2\.?\s*良い点:/i) || line.match(/良い点:/i)) {
-                currentSection = "good";
-                good += line.replace(/^2\.?\s*良い点:/i, '').replace(/良い点:/i, '').trim() + '\n';
-            } else if (line.match(/^3\.?\s*不足・改善点:/i) || line.match(/不足・改善点:/i)) {
-                currentSection = "bad";
-                bad += line.replace(/^3\.?\s*不足・改善点:/i, '').replace(/不足・改善点:/i, '').trim() + '\n';
-            } else if (line.match(/^4\.?\s*模範解答/i) || line.match(/模範解答/i)) {
-                currentSection = "model";
-                model += line.replace(/^4\.?\s*模範解答(の要点)?:/i, '').replace(/模範解答(の要点)?:/i, '').replace(/^4\.?\s*模範解答/i, '').replace(/模範解答/i, '').replace(/^:/, '').trim() + '\n';
-            } else {
-                if (currentSection === "good") good += line + '\n';
-                else if (currentSection === "bad") bad += line + '\n';
-                else if (currentSection === "model") model += line + '\n';
-            }
-        });
-
-        feedbackGrade.textContent = grade || "見つかりませんでした";
-        feedbackGood.textContent = good.trim() || "-";
-        feedbackBad.textContent = bad.trim() || "-";
-        feedbackModel.textContent = model.trim() || "-";
+        const feedbackContainer = document.getElementById('feedback-raw');
+        if (feedbackContainer) {
+            feedbackContainer.innerHTML = html;
+        }
     }
 
     function showTopicsView() {
