@@ -181,6 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let bad = "";
         let model = "";
 
+        // マークダウンの装飾（** など）が混入した際のエラーを防ぐため除去
+        feedbackRaw = feedbackRaw.replace(/\*\*/g, '');
+
         const lines = feedbackRaw.split('\n');
         let currentSection = "";
 
@@ -194,9 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (line.match(/^3\.?\s*不足・改善点:/i) || line.match(/不足・改善点:/i)) {
                 currentSection = "bad";
                 bad += line.replace(/^3\.?\s*不足・改善点:/i, '').replace(/不足・改善点:/i, '').trim() + '\n';
-            } else if (line.match(/^4\.?\s*模範解答の要点:/i) || line.match(/模範解答の要点:/i)) {
+            } else if (line.match(/^4\.?\s*模範解答/i) || line.match(/模範解答/i)) {
                 currentSection = "model";
-                model += line.replace(/^4\.?\s*模範解答の要点:/i, '').replace(/模範解答の要点:/i, '').trim() + '\n';
+                model += line.replace(/^4\.?\s*模範解答(の要点)?:/i, '').replace(/模範解答(の要点)?:/i, '').replace(/^4\.?\s*模範解答/i, '').replace(/模範解答/i, '').replace(/^:/, '').trim() + '\n';
             } else {
                 if (currentSection === "good") good += line + '\n';
                 else if (currentSection === "bad") bad += line + '\n';
