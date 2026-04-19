@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学習ノート</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="container">
+        <!-- 論点選択画面 -->
+        <div id="topics-view" class="view active">
+            <header>
+                <h1>学習ノート</h1>
+            </header>
+            <main>
+                <div id="loading-topics" class="loading">論点データを読み込んでいます...</div>
+                <div id="error-topics" class="error hidden"></div>
+                <ul id="topics-list" class="hidden"></ul>
+            </main>
+        </div>
+
+        <!-- 出題・回答画面 -->
+        <div id="question-view" class="view hidden">
+            <header>
+                <button id="back-button" class="text-button">戻る</button>
+                <h1 id="current-topic-title"></h1>
+            </header>
+            <main>
+                <div id="loading-question" class="loading">問題を生成しています...</div>
+                <div id="error-question" class="error hidden"></div>
+                
+                <div id="question-container" class="hidden">
+                    <div class="question-box">
+                        <p id="question-text"></p>
+                    </div>
+                    
+                    <div class="answer-section">
+                        <textarea id="answer-input" placeholder="回答を入力してください..."></textarea>
+                        <button id="submit-answer" class="primary-button">回答を送信</button>
+                    </div>
+                </div>
+
+                <div id="loading-evaluation" class="loading hidden">回答を評価しています...</div>
+                <div id="error-evaluation" class="error hidden"></div>
+
+                <div id="feedback-container" class="hidden">
+                    <div class="feedback-box">
+                        <h3>フィードバック</h3>
+                        <p><strong>総合評価:</strong> <span id="feedback-grade"></span></p>
+                        <div class="feedback-content">
+                            <h4>良い点</h4>
+                            <p id="feedback-good"></p>
+                            <h4>不足・改善点</h4>
+                            <p id="feedback-bad"></p>
+                            <h4>模範解答の要点</h4>
+                            <p id="feedback-model"></p>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="next-question" class="primary-button">次の問題</button>
+                        <button id="back-to-topics" class="secondary-button">論点選択に戻る</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
