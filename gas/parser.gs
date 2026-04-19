@@ -69,6 +69,7 @@ function parseTopicFile(filename) {
       return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
     }).replace(/[-\u2010-\u2015\uFF0D]/g, '-');
     title = sectionMatch[2];
+    fullTitle = id + " " + title;
   } else if (fullTitle.includes(' ')) {
     const parts = fullTitle.split(' ');
     id = parts[0];

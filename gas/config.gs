@@ -1,5 +1,5 @@
 const CONFIG = {
-  GEMINI_MODEL: 'gemini-3.0-flash',
+  GEMINI_MODEL: 'gemini-2.0-flash',
   GEMINI_ENDPOINT: 'https://generativelanguage.googleapis.com/v1beta/models/'
 };
 
