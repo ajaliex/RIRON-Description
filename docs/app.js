@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // 重要マークの判定（タイトルに☆が含まれるか、内容に☆を含むセクションがあるかはバックエンドから渡されるとベターだが
             // UI上はタイトルに☆が含まれるかどうかを簡易表示）
-            const titleHtml = escapeHtml(topic.title);
+            const titleHtml = escapeHtml(topic.fullTitle || topic.title);
             
             li.innerHTML = `<span class="topic-title">${titleHtml}</span>`;
             
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadQuestion(topicId, topicData) {
         currentSession.topicId = topicId;
         currentSession.topicData = topicData;
-        currentTopicTitle.textContent = topicData.title;
+        currentTopicTitle.textContent = topicData.fullTitle || topicData.title;
         
         switchView('question');
         
